@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+group 'com.frain'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+jar {
+    manifest {
+        attributes("Main-Class": "com.frain.SpiderService",
+                "Implementation-Title": "Gradle")
+    }
+    into('lib') {
+        from configurations.runtime
+    }
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6'
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
