@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.frain.spider.mapper.TMpConfMapper">
+  <resultMap id="BaseResultMap" type="com.frain.spider.model.TMpConf">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="page_url" jdbcType="VARCHAR" property="pageUrl" />
+    <result column="main_condition" jdbcType="VARCHAR" property="mainCondition" />
+    <result column="detail_condition" jdbcType="VARCHAR" property="detailCondition" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="cron" jdbcType="VARCHAR" property="cron" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, url, page_url, main_condition, detail_condition, type, label, cron
+  </sql>
+  <select id="selectByExample" parameterType="com.frain.spider.model.TMpConfExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mp_conf
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mp_conf
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_mp_conf
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.frain.spider.model.TMpConfExample">
+    delete from t_mp_conf
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.frain.spider.model.TMpConf">
+    insert into t_mp_conf (id, url, page_url, 
+      main_condition, detail_condition, type, 
+      label, cron)
+    values (#{id,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, #{pageUrl,jdbcType=VARCHAR}, 
+      #{mainCondition,jdbcType=VARCHAR}, #{detailCondition,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{label,jdbcType=VARCHAR}, #{cron,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.frain.spider.model.TMpConf">
+    insert into t_mp_conf
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="pageUrl != null">
+        page_url,
+      </if>
+      <if test="mainCondition != null">
+        main_condition,
+      </if>
+      <if test="detailCondition != null">
+        detail_condition,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="label != null">
+        label,
+      </if>
+      <if test="cron != null">
+        cron,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="pageUrl != null">
+        #{pageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mainCondition != null">
+        #{mainCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="detailCondition != null">
+        #{detailCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="label != null">
+        #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="cron != null">
+        #{cron,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.frain.spider.model.TMpConfExample" resultType="java.lang.Long">
+    select count(*) from t_mp_conf
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_mp_conf
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.url != null">
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pageUrl != null">
+        page_url = #{record.pageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mainCondition != null">
+        main_condition = #{record.mainCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detailCondition != null">
+        detail_condition = #{record.detailCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.label != null">
+        label = #{record.label,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cron != null">
+        cron = #{record.cron,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_mp_conf
+    set id = #{record.id,jdbcType=BIGINT},
+      url = #{record.url,jdbcType=VARCHAR},
+      page_url = #{record.pageUrl,jdbcType=VARCHAR},
+      main_condition = #{record.mainCondition,jdbcType=VARCHAR},
+      detail_condition = #{record.detailCondition,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=TINYINT},
+      label = #{record.label,jdbcType=VARCHAR},
+      cron = #{record.cron,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.frain.spider.model.TMpConf">
+    update t_mp_conf
+    <set>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="pageUrl != null">
+        page_url = #{pageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mainCondition != null">
+        main_condition = #{mainCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="detailCondition != null">
+        detail_condition = #{detailCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="label != null">
+        label = #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="cron != null">
+        cron = #{cron,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.frain.spider.model.TMpConf">
+    update t_mp_conf
+    set url = #{url,jdbcType=VARCHAR},
+      page_url = #{pageUrl,jdbcType=VARCHAR},
+      main_condition = #{mainCondition,jdbcType=VARCHAR},
+      detail_condition = #{detailCondition,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      label = #{label,jdbcType=VARCHAR},
+      cron = #{cron,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

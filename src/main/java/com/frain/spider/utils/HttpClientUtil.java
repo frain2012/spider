@@ -6,18 +6,22 @@ package com.frain.spider.utils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,33 +34,24 @@ import java.util.Map;
  */
 public class HttpClientUtil {
 
-    /**
+    /***
      * 执行get请求
-     * @param url
+     * @param url   -请求url
+     * @param charset - 编码集 "UTF-8"
+     * @return
      */
-    public static String get(final String url){
+    public static String get(final String url,final String charset){
         CloseableHttpClient httpclient = null;
         CloseableHttpResponse response=null;
+        String body = null;
         try{
-            httpclient = HttpClients.createDefault();
+            httpclient = createClient(url);
             HttpGet httpget = new HttpGet(url);
             response = httpclient.execute(httpget);
             HttpEntity entity = response.getEntity();
-            if (entity==null){
-                return null;
-            }
-            String body = EntityUtils.toString(entity,"UTF-8");
-//            System.out.println("--------------------------------------");
-//            System.out.println(response.getStatusLine());
-//            if (entity != null) {
-//                System.out.println("Response content length: " + entity.getContentLength());
-//                System.out.println("Response content: " + body);
-//            }
-//            System.out.println("------------------------------------");
-            return body;
+            body = EntityUtils.toString(entity,charset);
         }catch (Exception e){
             e.printStackTrace();
-            return null;
         }finally {
             if (response!=null){
                 try {
@@ -73,15 +68,26 @@ public class HttpClientUtil {
                 }
             }
         }
+        return body;
     }
 
-
-    public static String post(String url, Map<String,String>params){
+    /**
+     * 执行post请求
+     * @param url   --url
+     * @param params--参数
+     * @param charset--编码 "UTF-8"
+     * @return
+     */
+    public static String post(final String url,Map<String,String> headers, Map<String,String>params,String charset){
         CloseableHttpClient httpclient=null;
         CloseableHttpResponse response=null;
+        String body=null;
         try{
-            httpclient = HttpClients.createDefault();
+            httpclient = createClient(url);
             HttpPost httppost = new HttpPost(url);
+            if (headers!=null && !headers.isEmpty()){
+                //
+            }
             if (params!=null && !params.isEmpty()){
                 List<NameValuePair> formparams = new ArrayList<NameValuePair>();
                 for (Map.Entry<String,String> item:params.entrySet()) {
@@ -92,19 +98,9 @@ public class HttpClientUtil {
             }
             response = httpclient.execute(httppost);
             HttpEntity entity = response.getEntity();
-            if (entity==null){
-                return null;
-            }
-            String body = EntityUtils.toString(entity, "UTF-8");
-            if (entity != null) {
-                System.out.println("--------------------------------------");
-                System.out.println("Response content: " + body);
-                System.out.println("--------------------------------------");
-            }
-            return body;
+            body = EntityUtils.toString(entity, charset);
         }catch (Exception e){
             e.printStackTrace();
-            return null;
         }finally {
             if (response!=null){
                 try {
@@ -121,5 +117,25 @@ public class HttpClientUtil {
                 }
             }
         }
+        return body;
+    }
+
+
+    private static CloseableHttpClient createClient(String url){
+        if (url.indexOf("https")>-1){
+            try{
+                SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+                    public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+                        return true;
+                    }
+                }).build();
+                SSLConnectionSocketFactory sslcsf = new SSLConnectionSocketFactory(sslContext,
+                        SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+                return HttpClients.custom().setSSLSocketFactory(sslcsf).build();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return HttpClients.createDefault();
     }
 }
