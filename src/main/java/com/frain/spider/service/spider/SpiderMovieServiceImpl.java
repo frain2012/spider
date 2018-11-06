@@ -1,5 +1,6 @@
 package com.frain.spider.service.spider;
 
+import com.alibaba.fastjson.JSON;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -74,7 +75,9 @@ public class SpiderMovieServiceImpl implements SpiderMovieService {
             final String text = element.text().trim();
             String [] keys = text.split("◎");
             for (String key:keys){
-                System.out.println(key.trim());
+                final String code = key.trim();
+
+
             }
         }
 
