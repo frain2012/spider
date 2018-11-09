@@ -26,7 +26,7 @@ public class SimpleTest{
     public void testSer(){
 //        List<String> list=spiderMovieService.firstMatchContent("http://www.dytt8.net/",null);
 
-        spiderMovieService.ThirdMatchContent("http://www.dytt8.net/html/gndy/dyzz/20181102/57714.html",null);
+        spiderMovieService.ThirdMatchContent("http://www.ygdy8.net/html/gndy/dyzz/20181020/57637.html",null);
 
     }
 
